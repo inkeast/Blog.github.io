@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>云原生安全-攻防实践与体系构建 |  InkEast‘s Blog</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/favicon.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css"
+      />
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+       
+ 
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bulma@5.0.1/bulma.min.css"
+      />
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+      <!-- mermaid -->
+      
+      <style>
+        .swal2-styled.swal2-confirm {
+          font-size: 1.6rem;
+        }
+      </style>
+    </head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-云原生安全-攻防实践与体系构建"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  云原生安全-攻防实践与体系构建
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/11/11/%E4%BA%91%E5%8E%9F%E7%94%9F%E5%AE%89%E5%85%A8-%E6%94%BB%E9%98%B2%E5%AE%9E%E8%B7%B5%E4%B8%8E%E4%BD%93%E7%B3%BB%E6%9E%84%E5%BB%BA/" class="article-date">
+  <time datetime="2021-11-11T03:11:11.000Z" itemprop="datePublished">2021-11-11</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%95%BF%E5%89%91%E8%90%BD%E6%9C%88%E5%85%89/">长剑落月光</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">3.8k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">13 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="云原生安全"><a href="#云原生安全" class="headerlink" title="云原生安全"></a>云原生安全</h1><h2 id="云原生"><a href="#云原生" class="headerlink" title="云原生"></a>云原生</h2><ul>
+<li>轻、快、不变的基础设施<ul>
+<li>基础使用容器技术<ul>
+<li>生命周期短</li>
+<li>占用资源少</li>
+</ul>
+</li>
+<li>只更新容器镜像不改变容器运行模式</li>
+</ul>
+</li>
+<li>弹性服务编排<ul>
+<li>按需、弹性的控制服务的位置、容量、版本，监控并保证业务的可访问性</li>
+<li>服务编排对应用层隐藏了底层基础设施的细节，但又提供了强大的业务支持能力</li>
+</ul>
+</li>
+<li>开发运营一体化<ul>
+<li>将软件开发和运营相结合<ul>
+<li>缩短软件开发周期</li>
+<li>提供高质量软件的持续交付</li>
+</ul>
+</li>
+<li>消除开发和运营之间的隔阂，聚焦加速软件部署</li>
+</ul>
+</li>
+<li>微服务架构<ul>
+<li>将单体应用的功能拆分成大量独立、细粒度的服务</li>
+<li>使每个服务聚焦在自己的功能上，做到小而精</li>
+<li>通过编排组装实现复杂功能</li>
+<li>后续修改可复用，减少重构开销</li>
+</ul>
+</li>
+<li>无服务模型<ul>
+<li>基于代码和计算任务执行的云计算抽象模型</li>
+<li>聚焦函数计算，隐藏实现，让开发者聚焦业务本身</li>
+</ul>
+</li>
+</ul>
+<h2 id="云原生安全-1"><a href="#云原生安全-1" class="headerlink" title="云原生安全"></a>云原生安全</h2><h3 id="面向云原生环境的安全"><a href="#面向云原生环境的安全" class="headerlink" title="面向云原生环境的安全"></a>面向云原生环境的安全</h3><ul>
+<li>防护云原生环境中基础设施、编排系统和微服务等系统的安全</li>
+<li>不一定具备云原生的特性，但作用是保护日益普及的云原生环境</li>
+<li>例如 容器云的抗拒绝服务 防范DDoS</li>
+</ul>
+<h3 id="具有云原生特征的安全"><a href="#具有云原生特征的安全" class="headerlink" title="具有云原生特征的安全"></a>具有云原生特征的安全</h3><ul>
+<li>具有云原生特征的各类安全机制</li>
+<li>具有弹性、敏捷、轻量级、可编排等特性</li>
+<li>可以将传统的业务系统添加云原生机制</li>
+<li>理想情况下，云原生安全是在云原生环境下，对原有的安全机制进行重构或设计新的安全功能，使最终的安全机制能够与云原生系统无缝融合，最终体现出云原生的安全能力。</li>
+</ul>
+<h3 id="原生安全：融合的云原生安全"><a href="#原生安全：融合的云原生安全" class="headerlink" title="原生安全：融合的云原生安全"></a>原生安全：融合的云原生安全</h3><ul>
+<li>云安全就是一个通用场景下的安全问题</li>
+<li>原生安全<ul>
+<li>基于云原生</li>
+<li>无处不在</li>
+</ul>
+</li>
+<li>云原生安全阶段<ul>
+<li>安全赋能于云原生体系，构建云原生的安全能力</li>
+<li>安全产品具有云原生的新特性，如轻、快、不变的基础设施、弹性服务编排、开发运营一体化。</li>
+<li>云原生成为无处不在的安全</li>
+</ul>
+</li>
+</ul>
+<h2 id="面向云原生的安全体系"><a href="#面向云原生的安全体系" class="headerlink" title="面向云原生的安全体系"></a>面向云原生的安全体系</h2><h3 id="容器安全"><a href="#容器安全" class="headerlink" title="容器安全"></a>容器安全</h3><ul>
+<li>容器环境基础设施的安全<ul>
+<li>主机的安全配置对容器的影响</li>
+<li>主机上的安全漏洞和恶意进程对容器的影响</li>
+<li>容器进程利用主机安全漏洞</li>
+</ul>
+</li>
+<li>容器镜像安全<ul>
+<li>镜像中软件是否产生安全漏洞</li>
+<li>镜像在构建过程中是否存在安全风险</li>
+<li>镜像在传输过程中是否被恶意篡改</li>
+</ul>
+</li>
+<li>容器运行时的安全<ul>
+<li>运行中的容器隔离是否充分</li>
+<li>容器间的通信是否安全</li>
+<li>容器内的恶意程序受否影响到主机或其他容器</li>
+<li>容器的资源情况是否安全</li>
+</ul>
+</li>
+<li>容器生态的安全性<ul>
+<li>Docker自身的安全性</li>
+<li>Service Mesh/Serverless对容器安全的影响</li>
+<li>容器中安全密钥的管理与传统环境有何不同</li>
+<li>容器化的数据隐私保护与传统的数据隐私保护是否一致</li>
+</ul>
+</li>
+<li>容器云整体安全建设思路<ul>
+<li>物理安全</li>
+<li>容器云内部安全<ul>
+<li>宿主机安全</li>
+<li>虚拟化安全</li>
+<li>容器网络安全</li>
+<li>管理平台的安全</li>
+<li>数据安全</li>
+</ul>
+</li>
+<li>容器云内外之间的网络安全</li>
+</ul>
+</li>
+</ul>
+<h3 id="编排系统安全"><a href="#编排系统安全" class="headerlink" title="编排系统安全"></a>编排系统安全</h3><ul>
+<li>Kubernetes 安全</li>
+</ul>
+<h3 id="云原生应用安全"><a href="#云原生应用安全" class="headerlink" title="云原生应用安全"></a>云原生应用安全</h3><ul>
+<li>零信任体系</li>
+<li>云原生应用传统安全机制</li>
+<li>业务安全</li>
+<li>API安全</li>
+<li>面向服务网格的微服务认证和加密</li>
+<li>面向微服务的应用安全防护机制</li>
+</ul>
+<h2 id="云原生安全的关键问题"><a href="#云原生安全的关键问题" class="headerlink" title="云原生安全的关键问题"></a>云原生安全的关键问题</h2><ul>
+<li>容器不是轻量级的虚拟化，容器安全不是轻量级的虚拟化安全</li>
+<li>虚拟化安全关注的是资源，云原生安全关注的是应用</li>
+<li>安全左移是云原生安全的必经之路</li>
+</ul>
+<h3 id="如何防护短生命周期的容器"><a href="#如何防护短生命周期的容器" class="headerlink" title="如何防护短生命周期的容器"></a>如何防护短生命周期的容器</h3><ul>
+<li>容器的生命周期<ul>
+<li>虚拟机型<ul>
+<li>容器被当成虚拟机</li>
+<li>生命周期与虚拟机相当</li>
+<li>生命周期平均83天左右</li>
+</ul>
+</li>
+<li>原生型<ul>
+<li>使用Docker的命令启动和管理</li>
+<li>完成独立的功能</li>
+<li>生命周期在数十天</li>
+</ul>
+</li>
+<li>编排型<ul>
+<li>由编排系统管理</li>
+<li>根据业务动态生成和销毁</li>
+<li>平均周期一天以内</li>
+</ul>
+</li>
+<li>46%的容器生命周期小于1小时，11%的容器生命周期短于1分钟</li>
+<li>生命周期会影响攻防双方的战术偏好</li>
+</ul>
+</li>
+<li>攻击者<ul>
+<li>不会优先考虑在容器中持久化</li>
+<li>投入更大经历更急更为持久化的东西<ul>
+<li>代码</li>
+<li>第三方库</li>
+<li>镜像</li>
+</ul>
+</li>
+<li>开发安全和供应链安全变得更为重要</li>
+</ul>
+</li>
+<li>防守者<ul>
+<li>短生命周期和轻量级导致安装杀毒软件等机制过于沉重</li>
+</ul>
+</li>
+<li>终端检测与相应<ul>
+<li>捕获终端上的进程行为、状态等日志并对其进行分析和规则匹配，发现终端上的恶意攻击</li>
+<li>容器逃逸等攻击手法往往利用操作系统层面隔离的漏洞，导致现有的规则检测不能直接适用</li>
+<li>容器运行的进程行为月桌面终端有很大差别<ul>
+<li>更适合使用行为特征对工作负载进行识别</li>
+<li>容器日志智能体现短时间的进程和业务模式，无法进行画像</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="如何降低安全运营成本"><a href="#如何降低安全运营成本" class="headerlink" title="如何降低安全运营成本"></a>如何降低安全运营成本</h3><ul>
+<li>异常检测和行为分析技术路线存在的问题<ul>
+<li>成本高<ul>
+<li>传输带宽</li>
+<li>计算资源</li>
+</ul>
+</li>
+<li>存在误报<ul>
+<li>导致运营成本增加</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>安全的本质在于对抗及攻防投入产出比的平衡<ul>
+<li>攻击方<ul>
+<li>容器的短生命周期使攻击容器的代价高，收益小</li>
+<li>对第三方软件库、项目依赖的镜像投毒代价小、收益高</li>
+</ul>
+</li>
+<li>防守方<ul>
+<li>安全左移：将安全防护从运行时运营转化为开发测</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="DevSecOps"><a href="#DevSecOps" class="headerlink" title="DevSecOps"></a>DevSecOps</h3><ul>
+<li>容器具有的隔离性、运行时环境一致性、镜像仓库等特性将开发运营的流程打通</li>
+<li>安全能力应该覆盖开发和运营闭环的每个环节</li>
+<li>开发运营一体化成为DevSecOps</li>
+</ul>
+<h3 id="如何实现安全的云原生化"><a href="#如何实现安全的云原生化" class="headerlink" title="如何实现安全的云原生化"></a>如何实现安全的云原生化</h3><ul>
+<li>安全架构具备编排能力<ul>
+<li>编排是指将各类资源根据业务需要进行动态控制和管理</li>
+<li>安全架构需要借助容器编排系统的能力来动态部署或销毁安全资源</li>
+<li>安全架构可以借助容器编排系统进行动态升级</li>
+</ul>
+</li>
+<li>容器和宿主机安全：安全特权容器<ul>
+<li>在宿主机中的安全代理可以观察到宿主机和容器中的所有进程、文件系统等信息</li>
+<li>宿主机可以通过系统调用对容器中的进程、安全连接进行控制</li>
+<li>在宿主机层面可以实现安全防护</li>
+</ul>
+</li>
+<li>业务安全：Sidecar安全容器<ul>
+<li>Sidecar容器本质上是一种提供反向代理的容器</li>
+<li>Sidecar容器会劫持业务容器的流量，获得应用层的请求和相应，根据安全策略进行检测和防护</li>
+<li>Sidecar容器可以与编排系统深度融合，随着微服务和无服务容器的增加相应增加</li>
+</ul>
+</li>
+</ul>
+<h2 id="云原生安全现状"><a href="#云原生安全现状" class="headerlink" title="云原生安全现状"></a>云原生安全现状</h2><h3 id="云原生新范式：Docker-Kuberbetes"><a href="#云原生新范式：Docker-Kuberbetes" class="headerlink" title="云原生新范式：Docker+Kuberbetes"></a>云原生新范式：Docker+Kuberbetes</h3><ul>
+<li>容器在计算环境中扮演着越来越重要的角色</li>
+<li>容器生态安全问题越来越受到容器使用者的关注</li>
+</ul>
+<h3 id="镜像安全问题依然突出"><a href="#镜像安全问题依然突出" class="headerlink" title="镜像安全问题依然突出"></a>镜像安全问题依然突出</h3><ul>
+<li>大量官方镜像存在高危漏洞<ul>
+<li>软件开发者没有专业的安全团队，不能及时检查并应用软件的安全更新</li>
+<li>安全团队和镜像维护团队流程不一致</li>
+</ul>
+</li>
+<li>镜像中存在脆弱性问题<ul>
+<li>镜像暴漏账号和密码信息</li>
+<li>暴漏SSH服务</li>
+</ul>
+</li>
+</ul>
+<h3 id="安全配置规范执行和密钥凭证管理不理想"><a href="#安全配置规范执行和密钥凭证管理不理想" class="headerlink" title="安全配置规范执行和密钥凭证管理不理想"></a>安全配置规范执行和密钥凭证管理不理想</h3><ul>
+<li>CIS容器极限等安全配置规范落实情况并不理想</li>
+<li>将访问凭证等存放在代码中等问题使攻击者容易获得访问敏感数据的权限</li>
+</ul>
+<h3 id="运行时安全关注度上升，但依然很难"><a href="#运行时安全关注度上升，但依然很难" class="headerlink" title="运行时安全关注度上升，但依然很难"></a>运行时安全关注度上升，但依然很难</h3><ul>
+<li>能够检测出异常告警，但难以映射到安全问题</li>
+<li>告警信息淹没在大量的异常告警中</li>
+</ul>
+<h3 id="合规性要求依然迫切，业界苦于无规律可循"><a href="#合规性要求依然迫切，业界苦于无规律可循" class="headerlink" title="合规性要求依然迫切，业界苦于无规律可循"></a>合规性要求依然迫切，业界苦于无规律可循</h3><ul>
+<li>没有测评标准（截至2020年）</li>
+</ul>
+<h1 id="云原生技术"><a href="#云原生技术" class="headerlink" title="云原生技术"></a>云原生技术</h1><h2 id="容器技术"><a href="#容器技术" class="headerlink" title="容器技术"></a>容器技术</h2><h3 id="容器与虚拟化"><a href="#容器与虚拟化" class="headerlink" title="容器与虚拟化"></a>容器与虚拟化</h3><ul>
+<li>虚拟化通常是在Hypervisor层进行虚拟化</li>
+<li>容器没有Hypervisor层，与主机共享硬件资源和操作系统</li>
+</ul>
+<h3 id="容器镜像"><a href="#容器镜像" class="headerlink" title="容器镜像"></a>容器镜像</h3><ul>
+<li>虚拟机镜像是将一个完整系统封装成一个镜像文件</li>
+<li>容器镜像是分层存储的文件系统</li>
+</ul>
+<h3 id="容器存储"><a href="#容器存储" class="headerlink" title="容器存储"></a>容器存储</h3><ul>
+<li>镜像元数据<ul>
+<li>镜像的每一层的ID是该文件内容的散列校验值，作为层的唯一标识</li>
+</ul>
+</li>
+<li>存储驱动<ul>
+<li>Docker依靠驱动技术来管理镜像与运行他们的容器间的存储和交互。</li>
+</ul>
+</li>
+<li>数据卷<ul>
+<li>Docker采用数据卷的形式向容器提供持久化存储</li>
+</ul>
+</li>
+<li>容器网络<ul>
+<li>主机网络<ul>
+<li>None网络模式</li>
+<li>Bridge网络模式</li>
+<li>Host网络模式</li>
+<li>Container网络模式</li>
+</ul>
+</li>
+<li>集群网络<ul>
+<li>容器与容器之间的通信</li>
+<li>同一个主机内不同pod之间的通信</li>
+<li>跨主机pod之间的通信</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="容器运行时"><a href="#容器运行时" class="headerlink" title="容器运行时"></a>容器运行时</h3><ul>
+<li>容器运行时负责管理容器运行的整个生命周期</li>
+</ul>
+<h2 id="容器编排"><a href="#容器编排" class="headerlink" title="容器编排"></a>容器编排</h2><ul>
+<li>集群编排工具能够帮助用户以集群的方式在主机上启动容器，并能偶实现相应的网络互联</li>
+<li>提供负载均衡、可扩展、容错和高可用</li>
+</ul>
+<h2 id="微服务"><a href="#微服务" class="headerlink" title="微服务"></a>微服务</h2><ul>
+<li>微服务就是将一个完整应用中所有的模块拆分成不同的服务，其中每个服务都可以独立部署、维护和扩展。服务之间通常通过RESTful API通信，这些服务围绕业务能力构建，且每个服务均可使用不同的编程语言和不同的数据存储技术。</li>
+<li>使用功能较明确、业务较精炼的服务去解决更大、更实际的问题。</li>
+</ul>
+<h2 id="服务网络"><a href="#服务网络" class="headerlink" title="服务网络"></a>服务网络</h2><ul>
+<li>服务网络运行在服务旁，并对服务透明。</li>
+<li>服务网络的出现将微服务治理从自身应用中抽离出来，极大降低了代码耦合度，使微服务治理不再复杂</li>
+</ul>
+<h2 id="Serverless"><a href="#Serverless" class="headerlink" title="Serverless"></a>Serverless</h2><ul>
+<li>Serverless可以在不考虑服务器的情况下构建并运行应用程序和服务</li>
+<li>将服务器交由第三方管理</li>
+<li>实现方式<ul>
+<li>Bankend as a Service 后端即服务</li>
+<li>Functions as a Service 函数即服务<ul>
+<li>开发者编写代码并定义何时调用</li>
+<li>函数在云厂商提供的服务端运行</li>
+<li>事件驱动由消息触发</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="DevOps"><a href="#DevOps" class="headerlink" title="DevOps"></a>DevOps</h2><ul>
+<li>打破开发人员和运维人员之间的壁垒和鸿沟，高效地组织团队通过自动化工具相互协作以完成软件生命周期管理，从而更快且频繁的交付高质量且稳定的软件。</li>
+<li>云原生提供DevOps基础设施</li>
+<li>微服务架构加速DevOps的应用</li>
+<li>DevOps赋能服务网络</li>
+<li>DevOps加速Serverless应用迁移</li>
+</ul>
+<h1 id="容器基础设施的风险分析"><a href="#容器基础设施的风险分析" class="headerlink" title="容器基础设施的风险分析"></a>容器基础设施的风险分析</h1><h2 id="容器基础设施面临的风险"><a href="#容器基础设施面临的风险" class="headerlink" title="容器基础设施面临的风险"></a>容器基础设施面临的风险</h2><h3 id="容器镜像存在的风险"><a href="#容器镜像存在的风险" class="headerlink" title="容器镜像存在的风险"></a>容器镜像存在的风险</h3><ul>
+<li>容器镜像是一个不包含系统内核的联合文件系统</li>
+<li>容器是动态的，镜像是静态的</li>
+</ul>
+<h4 id="不安全的第三方组件"><a href="#不安全的第三方组件" class="headerlink" title="不安全的第三方组件"></a>不安全的第三方组件</h4><ul>
+<li>用户自己的代码依赖若干开源组件，开源组件本身又有着复杂的依赖树</li>
+<li>开发者不知道自己的镜像中包含多少及哪些组件</li>
+<li>包含的组件越多，可能存在的漏洞就越多</li>
+</ul>
+<h4 id="大肆传播的恶意镜像"><a href="#大肆传播的恶意镜像" class="headerlink" title="大肆传播的恶意镜像"></a>大肆传播的恶意镜像</h4><ul>
+<li>公共仓库中可能存在恶意镜像</li>
+</ul>
+<h4 id="极易泄露的敏感信息"><a href="#极易泄露的敏感信息" class="headerlink" title="极易泄露的敏感信息"></a>极易泄露的敏感信息</h4><ul>
+<li>开发者可能将敏感信息直接写入代码中，或以配置文件的形式存放。</li>
+</ul>
+<h3 id="活动容器存在的风险"><a href="#活动容器存在的风险" class="headerlink" title="活动容器存在的风险"></a>活动容器存在的风险</h3><h4 id="不安全的容器应用"><a href="#不安全的容器应用" class="headerlink" title="不安全的容器应用"></a>不安全的容器应用</h4><ul>
+<li>容器环境下的业务代码本身可能存在Bug甚至安全漏洞</li>
+</ul>
+<h4 id="不受限制的资源共享"><a href="#不受限制的资源共享" class="headerlink" title="不受限制的资源共享"></a>不受限制的资源共享</h4><ul>
+<li>如果容器使用了过多资源，就会对宿主机和宿主机上的各种其他容器造成影响</li>
+<li>默认情况下，Docker并不会对容器资源使用进行限制</li>
+</ul>
+<h4 id="不安全的配置与挂载"><a href="#不安全的配置与挂载" class="headerlink" title="不安全的配置与挂载"></a>不安全的配置与挂载</h4><h3 id="容器网络存在的风险"><a href="#容器网络存在的风险" class="headerlink" title="容器网络存在的风险"></a>容器网络存在的风险</h3><ul>
+<li>容器之间可能发生网络攻击</li>
+<li>Docker 具有CAP_NET_RAW权限，具备构造并发送ICMP、ARP等报文的能力</li>
+<li>可能发生ARP欺骗、DNS劫持等中间人攻击</li>
+</ul>
+<h3 id="容器管理程序接口存在的风险"><a href="#容器管理程序接口存在的风险" class="headerlink" title="容器管理程序接口存在的风险"></a>容器管理程序接口存在的风险</h3><ul>
+<li>UNIX socket<ul>
+<li>将普通用户加入了docker用户组，使普通用户有权直接访问UNIX socket</li>
+<li>攻击者能够借助Docker UNIX socket在宿主机上提升为root权限</li>
+<li>用户可能会将Docker UNIX socket挂载到系统内部</li>
+<li>该容器被入侵可能借助socket实现容器逃逸，获得宿主机root权限</li>
+</ul>
+</li>
+<li>TCP socket<ul>
+<li>默认情况下对Docker守护进程TCP socket的访问是无加密且无认证的</li>
+<li>攻击者借助TCP socket可以实现对目标机器的控制</li>
+</ul>
+</li>
+</ul>
+<h3 id="宿主机操作系统存在的风险"><a href="#宿主机操作系统存在的风险" class="headerlink" title="宿主机操作系统存在的风险"></a>宿主机操作系统存在的风险</h3><ul>
+<li>容器与宿主机共享内核</li>
+<li>宿主机内核本身存在漏洞是能够在容器内进行利用的</li>
+<li>一些尝试在拜托共享内核</li>
+<li>安全容器不等于绝对安全</li>
+</ul>
+<h3 id="软件漏洞"><a href="#软件漏洞" class="headerlink" title="软件漏洞"></a>软件漏洞</h3><ul>
+<li>Docker本身存在安全漏洞</li>
+</ul>
+<h2 id="针对容器化开发测试过程的攻击案例"><a href="#针对容器化开发测试过程的攻击案例" class="headerlink" title="针对容器化开发测试过程的攻击案例"></a>针对容器化开发测试过程的攻击案例</h2><h3 id="CVE-2018-15664-符号链接替换漏洞"><a href="#CVE-2018-15664-符号链接替换漏洞" class="headerlink" title="CVE-2018-15664 符号链接替换漏洞"></a>CVE-2018-15664 符号链接替换漏洞</h3><ul>
+<li>在docker 18.06.1-ce-rc2版本之前，docker cp 命令对应的后端API存在基于竞争条件的符号链接替换漏洞，能够导致目录穿越。</li>
+<li>攻击者可利用此漏洞以root权限实现宿主机文件系统的任意读写</li>
+<li>静态条件漏洞<ul>
+<li>程序对对象进行安全检查和使用该对象步骤之间存在间隙</li>
+<li>恶意程序先构造一个合法对象骗过安全检查</li>
+<li>然后使用恶意对象替换之前的合法对象</li>
+</ul>
+</li>
+</ul>
+<h3 id="CVE-2019-142771-加载不受信任的动态链接库"><a href="#CVE-2019-142771-加载不受信任的动态链接库" class="headerlink" title="CVE-2019-142771 加载不受信任的动态链接库"></a>CVE-2019-142771 加载不受信任的动态链接库</h3><ul>
+<li>在docker19,03.x之前的docker中，docker cp命令依赖的docker-tar组件会加载容器内部的nsswitch动态链接库，但自身未被容器化</li>
+<li>攻击者通过劫持容器内的nsswitch动态链接库来实现对宿主机进程的代码注入，获得宿主机上root权限</li>
+</ul>
+<h2 id="针对容器软件供应链的攻击案例"><a href="#针对容器软件供应链的攻击案例" class="headerlink" title="针对容器软件供应链的攻击案例"></a>针对容器软件供应链的攻击案例</h2><h3 id="镜像漏洞利用"><a href="#镜像漏洞利用" class="headerlink" title="镜像漏洞利用"></a>镜像漏洞利用</h3> 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>版权声明： </strong>
+          
+          本博客所有文章除特别声明外，著作权归作者所有。转载请注明出处！
+          
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://yoursite.com/2021/11/11/%E4%BA%91%E5%8E%9F%E7%94%9F%E5%AE%89%E5%85%A8-%E6%94%BB%E9%98%B2%E5%AE%9E%E8%B7%B5%E4%B8%8E%E4%BD%93%E7%B3%BB%E6%9E%84%E5%BB%BA/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/" rel="tag">云原生</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%AE%89%E5%85%A8/" rel="tag">安全</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+    
+      <a href="/2020/04/09/%E4%BF%9E%E5%86%9B%E4%BA%A7%E5%93%81%E6%96%B9%E6%B3%95%E8%AE%BA/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">产品方法论-俞军</div>
+      </a>
+    
+  </nav>
+
+  
+   
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2017-2021
+        <i class="ri-heart-fill heart_icon"></i> Ink East
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+      </li>
+    </ul>
+  </div>
+</footer>    
+    </main>
+    <div class="float_btns">
+      <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+    </div>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/ayer-side.svg" alt="InkEast‘s Blog"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-3.6.0.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+    
+
+  </div>
+</body>
+
+</html>
