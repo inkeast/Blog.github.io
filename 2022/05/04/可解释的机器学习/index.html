@@ -85,7 +85,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">2.9k</span>
+            <span class="post-count">4.1k</span>
         </span>
     </span>
 
@@ -94,7 +94,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">9 分钟</span>
+            <span class="post-count">14 分钟</span>
         </span>
     </span>
 </div>
@@ -308,11 +308,172 @@
 <li>解释者(Explainer)可以是人或机器</li>
 </ul>
 <h3 id="什么是好的解释"><a href="#什么是好的解释" class="headerlink" title="什么是好的解释"></a>什么是好的解释</h3><ul>
-<li>解释具有对比性<ul>
+<li><p>解释具有对比性</p>
+<ul>
 <li>人们通常不会问为什么会做出某种预测，但会问为什么会做出这种预测而不是另一种预测。</li>
 <li>最好的解释是强调感兴趣的对象和参照对象之间最大的差异</li>
 <li>人类不希望对预测有一个完整的解释，而是希望将不同之处与另一个实例的预测进行比较</li>
 <li>自动创建对比性解释的解决方案还肯涉及在数据中寻找原型</li>
+</ul>
+</li>
+<li><p>选择性的解释</p>
+<ul>
+<li>人们不希望对涵盖事件的实际原因和完整原因进行解释</li>
+<li>人们习惯于从各种可能的原因中选择一个或两个原因作为解释</li>
+<li>一个事件可以由各种原因解释，为什么做出了某种预测也可能由不止一个选择性的解释</li>
+</ul>
+</li>
+<li><p>解释是社会性的</p>
+<ul>
+<li>解释是解释者和解释的接收者之间的交互</li>
+<li>社会背景决定了解释的内容和性质</li>
+</ul>
+</li>
+<li><p>解释的重点是异常</p>
+<ul>
+<li>人们更关注异常原因来解释事件</li>
+<li>如果一个预测的输入是异常的，并影响了预测，那么它应该将其包括在解释中</li>
+</ul>
+</li>
+<li><p>解释是真实地</p>
+<ul>
+<li>良好地解释是真实的，但不是“好的”解释的重要因素</li>
+<li>选择性似乎比真实性更重要</li>
+<li>解释应该尽可能真实地预测事件</li>
+<li>对人类来说，解释地保真度不如它的选择性、对比性和社会性重要</li>
+</ul>
+</li>
+<li><p>好的解释与被解释者地先验知识是一致的</p>
+<ul>
+<li>人们往往忽视与他们先验知识不一致的信息，这种效应被称为确认偏差</li>
+<li>这种偏差不可避免，人们往往会贬低或忽视与他们先验知识不一致的解释</li>
+<li>先验知识因人而异</li>
+<li>群体可能存在共同的先验知识</li>
+<li>好的解释与先验知识是一致的</li>
+</ul>
+</li>
+<li><p>好的解释是普遍性和很可能的</p>
+<ul>
+<li><p>可以普遍解释很多事件的解释可以被认为是一个好的解释</p>
+</li>
+<li><p>与异常原因能够做出好的解释说法矛盾</p>
+<ul>
+<li>作者认为 异常原因胜过普遍原因</li>
+<li>在给定情况下，异常原因是罕见的，在没有异常事件的情况下，普遍性的解释被认为是一个好解释</li>
+<li>人们往往会误判共同事件的可能性</li>
+</ul>
+</li>
+<li><p>普遍性可以很容易通过特征的支持来衡量</p>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="可解释的模型"><a href="#可解释的模型" class="headerlink" title="可解释的模型"></a>可解释的模型</h1><table>
+<thead>
+<tr>
+<th align="center">算法</th>
+<th align="center">线性</th>
+<th align="center">单调</th>
+<th align="center">交互</th>
+<th align="center">任务</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">线性回归</td>
+<td align="center">是</td>
+<td align="center">是</td>
+<td align="center">否</td>
+<td align="center">回归</td>
+</tr>
+<tr>
+<td align="center">逻辑回归</td>
+<td align="center">否</td>
+<td align="center">是</td>
+<td align="center">否</td>
+<td align="center">分类</td>
+</tr>
+<tr>
+<td align="center">决策树</td>
+<td align="center">否</td>
+<td align="center">部分</td>
+<td align="center">是</td>
+<td align="center">分类；回归</td>
+</tr>
+<tr>
+<td align="center">RuleFit</td>
+<td align="center">是</td>
+<td align="center">否</td>
+<td align="center">是</td>
+<td align="center">分类；回归</td>
+</tr>
+<tr>
+<td align="center">朴素贝叶斯</td>
+<td align="center">否</td>
+<td align="center">是</td>
+<td align="center">否</td>
+<td align="center">分类</td>
+</tr>
+<tr>
+<td align="center">k-最近邻</td>
+<td align="center">否</td>
+<td align="center">否</td>
+<td align="center">否</td>
+<td align="center">分类；回归</td>
+</tr>
+</tbody></table>
+<h2 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h2><ul>
+<li>线性回归(Linear Regression)将目标预测为特征输入的加权和</li>
+<li>所学关系的线性使解释变得容易</li>
+<li>线性回归模型的线性特点使估计过程变得简单</li>
+<li>线性方程在模块化水平上具有易于解释的理解</li>
+<li>模型是否为正确的模型取决于数据中的关系是否满足某些假设<ul>
+<li>线性<ul>
+<li>线性回归使预测成为特征的线性组合</li>
+<li>线性易于量化和描述，它们可加并容易分离</li>
+</ul>
+</li>
+<li>正态性<ul>
+<li>假设给定的目标结果服从正态分布</li>
+<li>若违反此假设，则特征权重的估计置信区间无效</li>
+</ul>
+</li>
+<li>同方差性<ul>
+<li>假设误差项的方差在整个特征空间内是恒定的</li>
+<li>该假设在现实中经常被违背<ul>
+<li>现实中由于不同值的不同意义，误差常常不同</li>
+<li>如不同大小的房屋价格估计误差常常不同</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>独立性<ul>
+<li>假设每个实例独立于其他实例</li>
+<li>如果存在相关关系，需要使用特殊的模型，否则会的出错误的结论</li>
+</ul>
+</li>
+<li>固定特征<ul>
+<li>输入特征被认为是固定的</li>
+<li>固定意味着它们被视为给定常数，而不是统计向量，意味着它们没有测量误差</li>
+</ul>
+</li>
+<li>不存在多重共线性<ul>
+<li>不需要强相关的特征，这回扰乱对权重的估计</li>
+<li>在两个特征强相关的情况下，由于特征效应是累加的，估计权重变得困难，无法确定哪一个相关特征归因了效应</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="解释"><a href="#解释" class="headerlink" title="解释"></a>解释</h3><ul>
+<li>线性回归模型中权重的解释取决于相应特征的类型<ul>
+<li>数值特征：将数值特征增加一个单位会根据其权重改变估计结果</li>
+<li>二分类特征：每个实例都采用两个可能值之一的特征。该特征从参照类型更改为其他类型会根据特征的权重改变估计结果</li>
+<li>具有多个类别的分类特征：具有固定数量的可能值特征</li>
+<li>截距项β：截距是“常量特征”的特征权重，对于所有实例都是1。结局的解释通常不相关。</li>
+</ul>
+</li>
+<li>数值特征的解释<ul>
+<li>当其他特征保持不变时，特征x每增加一个单位，预测结果y增加z</li>
 </ul>
 </li>
 </ul>
