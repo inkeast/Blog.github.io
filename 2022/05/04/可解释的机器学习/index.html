@@ -85,7 +85,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">4.1k</span>
+            <span class="post-count">4.6k</span>
         </span>
     </span>
 
@@ -94,7 +94,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">14 分钟</span>
+            <span class="post-count">15 分钟</span>
         </span>
     </span>
 </div>
@@ -476,6 +476,65 @@
 <li>当其他特征保持不变时，特征x每增加一个单位，预测结果y增加z</li>
 </ul>
 </li>
+<li>分类特征的解释<ul>
+<li>当所有其他特征保持不变时，特征x参照类别改变为其他类别时，预测结果y增加z</li>
+<li>R-平方度量(R-squared Measurement)<ul>
+<li>该指标表现了模型解释了目标结果的总方差中的多少</li>
+<li>该指标越高，模型对数据的解释就越好</li>
+<li>R^2 = 1 - SSE/SST<ul>
+<li>SSE 为误差项的平方和<ul>
+<li>表现拟合线性模型还有多少方差</li>
+</ul>
+</li>
+<li>SST 是数据方差的平方和<ul>
+<li>目标结果的总方差</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>优化后的R-平方<ul>
+<li>Ro^2 = 1 - ( 1 - R^2 )( n - 1)/( n - p - 1)<ul>
+<li>p为特征的数量</li>
+<li>n为实例的数量</li>
+</ul>
+</li>
+<li>考虑了模型中的特征数量</li>
+<li>解释一个调整后的R平方很低的模型是没有意义的，因为这样的模型基本上不能解释大部分的方差</li>
+</ul>
+</li>
+<li>特征重要性<ul>
+<li>线性回归模型中的某个特征重要性可以用它的 t-统计量(t-statistic)的绝对值衡量</li>
+<li>t-统计量是以标准差为尺度的估计权重<ul>
+<li>t = β / SE(β)</li>
+</ul>
+</li>
+<li>特征的重要性随着权重的增加而增加</li>
+<li>估计权重的方差越大，特征越不重要</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="可视化解释"><a href="#可视化解释" class="headerlink" title="可视化解释"></a>可视化解释</h3><ul>
+<li>权重图 (Weight Plot)<ul>
+<li>权重表中的权重和方差估计可以在权重图中可视化</li>
+</ul>
+</li>
+<li>效应图 (Effect Plot)<ul>
+<li>当线性回归模型的权重与实际特征值相乘时，可以更有意义地进行分析</li>
+<li>权重取决于特性地比例</li>
+<li>特征效应<ul>
+<li>effect = wx</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="解释单个实例预测"><a href="#解释单个实例预测" class="headerlink" title="解释单个实例预测"></a>解释单个实例预测</h3><ul>
+<li>计算单个实例地特征对预测有多大贡献</li>
+<li>特定实例地特征效应地解释仅与各个特征地特征效应分布相比较才有意义</li>
 </ul>
  
       <!-- reward -->
