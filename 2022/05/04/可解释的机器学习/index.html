@@ -85,7 +85,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">5.3k</span>
+            <span class="post-count">7.1k</span>
         </span>
     </span>
 
@@ -94,7 +94,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">18 分钟</span>
+            <span class="post-count">24 分钟</span>
         </span>
     </span>
 </div>
@@ -611,6 +611,187 @@
 <li>权重的解释可能不直观</li>
 <li>完全相关的特征可能找不到线性方程的唯一解</li>
 <li>相关性太强时，线性方程变得不稳定</li>
+</ul>
+<h2 id="逻辑回归"><a href="#逻辑回归" class="headerlink" title="逻辑回归"></a>逻辑回归</h2><ul>
+<li>逻辑回归(Logistic Regression)建模有两个可能结果的概率分类问题，它是针对分类问题的线性回归模型的扩展</li>
+</ul>
+<h3 id="线性回归用于分类有什么问题"><a href="#线性回归用于分类有什么问题" class="headerlink" title="线性回归用于分类有什么问题"></a>线性回归用于分类有什么问题</h3><ul>
+<li><p>线性模型不输出概率，但他将类视为数字（0和1），并拟合最佳超平面，以最小化点和超平面之间的距离。它只是在点之间插值，并不能把它解释为概率。</p>
+</li>
+<li><p>由于预测的结果不是概率，而是点与点之间的线性插值，没有一个有意义的阈值可以用来区分一个类和另一个类。<a target="_blank" rel="noopener" href="https://stats.stackexchange.com/questions/22381/why-not-approach-classification-through-regression">[Stackoverflow]</a></p>
+</li>
+<li><p>线性模型不能扩展到居于偶多个类的分类问题。</p>
+</li>
+</ul>
+<h3 id="理论"><a href="#理论" class="headerlink" title="理论"></a>理论</h3><ul>
+<li>逻辑回归不是拟合直线或超平面，而是使用逻辑函数将线性方程的输出挤压到0到1之间。$logistic(n) = \frac{1}{1+exp(-\eta)}$</li>
+</ul>
+<h3 id="解释-1"><a href="#解释-1" class="headerlink" title="解释"></a>解释</h3><ul>
+<li><p>odds被称为几率，指时间发生概率除以事件不发生概率</p>
+</li>
+<li><p>$\frac{odds_{x_j+1}}{odds} = \frac{exp(\beta_0+\beta_1x_1+…\beta_j(x_j+1)+…+\beta_px_p}{exp(\beta_0+\beta_1x_1+…\beta_jx_j+…+\beta_px_p}$</p>
+</li>
+<li><p>$\frac{odds_{x_j+1}}{odds} = exp(\beta_j(x_j+1)-\beta_jx_j) = exp(\beta_j)$</p>
+</li>
+<li><p>数值特征：如果你将特征$x_j$增加一个单位，则估计的几率将乘以因子$exp(\beta_j)$</p>
+</li>
+<li><p>二分类特征：只取两种可能指的特征，其以是参照类别。将特征$x_j$从参照类别更改为其他类别，则估计的几率将乘以因子$exp(\beta_j)$</p>
+</li>
+<li><p>截距项$\beta_0$：所有数字特征为零和分类特征为参照类别，则估计的几率是$exp(\beta_0)$。截距的解释通常不相关。</p>
+</li>
+</ul>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><ul>
+<li><p>逻辑回归的解释更加困难，权重的解释是乘法而不是加法</p>
+</li>
+<li><p>逻辑回归可能受到完全分离(Complete Separation)的影响。</p>
+<ul>
+<li><p>如果有一个特征能够将两个类完全分开，那么逻辑回归模型就不能再被训练了。</p>
+</li>
+<li><p>该特征的权重不会首先，因为最佳权重将是无限的</p>
+</li>
+</ul>
+</li>
+<li><p>逻辑回归模型不仅是一个分类模型，而且还给出概率。</p>
+</li>
+</ul>
+<h2 id="FLM-GAM和其他模型"><a href="#FLM-GAM和其他模型" class="headerlink" title="FLM,GAM和其他模型"></a>FLM,GAM和其他模型</h2><ul>
+<li><p>广义线性模型(Generalized Linear Models, GLMs)</p>
+<ul>
+<li>解决给定特征目标结果y不遵循高斯分布问题</li>
+</ul>
+</li>
+<li><p>广义加性模型(Generalized Additive Models, GAMs)</p>
+<ul>
+<li>解决特征和y之间的真实关系不是线性的问题</li>
+</ul>
+</li>
+</ul>
+<h3 id="非高斯输出结果-GLM"><a href="#非高斯输出结果-GLM" class="headerlink" title="非高斯输出结果 - GLM"></a>非高斯输出结果 - GLM</h3><ul>
+<li><p>核心概念：保留特征的加权和，但允许非高斯结果分布，并通过可能的非线性函数连接该分布的期望均值与加权和。</p>
+</li>
+<li><p>经典线性模型被看作GLM的一个特例，经典线性模型中高斯分布的连接函数是一个简单的恒等函数。高斯分布由均值和方差进行参数化。均值描述了期望均值，方差则描述了在均值上下值的变化程度。<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Exponential_family#Table_of_distributions">[指数族分布表]</a></p>
+</li>
+<li><p>在GLM框架下，这个概念推广到任意分布和任意连接函数。</p>
+</li>
+</ul>
+<h3 id="交互"><a href="#交互" class="headerlink" title="交互"></a>交互</h3><ul>
+<li><p>线性回归模型假设一个特征的效应是保持相同的，与其他特征的值无关。</p>
+</li>
+<li><p>在拟合线性模型之前，在特征矩阵中添加一列，表示特征之间的交互，并像往常一样拟合模型。</p>
+</li>
+</ul>
+<h3 id="非线性效应-GAM"><a href="#非线性效应-GAM" class="headerlink" title="非线性效应-GAM"></a>非线性效应-GAM</h3><ul>
+<li>非线性关系建模<ul>
+<li><p>特征转换（如对数）</p>
+</li>
+<li><p>特征分类</p>
+</li>
+<li><p>广义加性模型（GAM）</p>
+<ul>
+<li>假定关系可以由每个特征的任意函数的和建模结果</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h3><ul>
+<li><p>线性模型具有广泛的应用，并被许多社区认为是建模的现状</p>
+</li>
+<li><p>除了进行预测之外，还可以使用模型进行推断，得出有关数据的结论；并可以得到权重的置信区间、显著性检验、预测区间。</p>
+</li>
+</ul>
+<h3 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li><p>线性模型的大多数修改都会使模型的解释性变差。</p>
+</li>
+<li><p>GLM、GAM等依赖于有关数据生成的假设，如果违反了这些假设，则对权重的解释不再有效。</p>
+</li>
+</ul>
+<h2 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h2><ul>
+<li><p>线性回归和逻辑回归在特征与结果之间的关系为非线性或特征交互的情况下会失败。</p>
+</li>
+<li><p>基于树的模型根据特征中的某些截断值多次分割数据。</p>
+</li>
+<li><p>通过分割，创建数据集的不同子集，每个实例都属于一个自己。</p>
+</li>
+<li><p>为了预测每个叶节点的结果，使用该节点中训练数据的平均结果。</p>
+</li>
+</ul>
+<h3 id="解释-2"><a href="#解释-2" class="headerlink" title="解释"></a>解释</h3><ul>
+<li>从根节点开始，转到下一个节点，边表明要查看的子集。一旦到达叶节点，该节点将表明预测的结果。</li>
+</ul>
+<h4 id="特征重要性"><a href="#特征重要性" class="headerlink" title="特征重要性"></a>特征重要性</h4><ul>
+<li>决策树中特征的总体重要性计算方式：<ul>
+<li><p>遍历使用该特征的所有分割，测量它相对于父节点减少了多少方差或基尼指数。</p>
+</li>
+<li><p>所有重要性的综合被缩放为100，每个重要性可以解释为总体模型重要性的一部分</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="树分解"><a href="#树分解" class="headerlink" title="树分解"></a>树分解</h4><ul>
+<li><p>通过将决策路径分解为每个特征的组成，可以解释决策树的单个预测</p>
+</li>
+<li><p>可以通过树跟踪决策，并通过在每个决策节点上添加的贡献来解释预测</p>
+</li>
+</ul>
+<h3 id="优点-2"><a href="#优点-2" class="headerlink" title="优点"></a>优点</h3><ul>
+<li><p>树结构非常适合捕获数据中特征之间的交互</p>
+</li>
+<li><p>数据最终被分成不同的组，不线性回归中多维超平面上的点容易理解</p>
+</li>
+<li><p>树结构由一个自然的可视化，包括它的节点和边</p>
+</li>
+<li><p>不需要转换特征</p>
+</li>
+</ul>
+<h3 id="缺点-2"><a href="#缺点-2" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>树不能处理线性关系。输入特征和结果之间的任何线性关系都必须能通过分割来近似，从而创建一个阶跃函数。<ul>
+<li><p>缺乏平滑度</p>
+</li>
+<li><p>不稳定</p>
+</li>
+<li><p>终端节点的数量随深度的增加而迅速增加</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="决策规则"><a href="#决策规则" class="headerlink" title="决策规则"></a>决策规则</h2><ul>
+<li><p>决策规则是一个简单的IF-THEN语句，由条件和预测组成。</p>
+</li>
+<li><p>决策规则可能是最容易解释的预测模型。</p>
+</li>
+<li><p>决策规则的有用性通常概括为两个数字：支持度(Support)和准确性(Accuracy)</p>
+<ul>
+<li><p>规则的支持度或覆盖度：规则条件适用的实例所占的百分比称为支持度</p>
+</li>
+<li><p>规则的准确性或置信度：规则的准确性是衡量规则在规则条件适用的实例预测正确类别时的准确性的指标。</p>
+</li>
+</ul>
+</li>
+<li><p>组合多个规则的两种主要策略</p>
+<ul>
+<li><p>决策列表</p>
+<ul>
+<li><p>决策列表向决策规则引入有序</p>
+</li>
+<li><p>如果第一条规则对实例的条件为真，则使用第一条预测的规则</p>
+</li>
+<li><p>如果没有，转移到下一个规则</p>
+</li>
+<li><p>决策列表只返回适用列表第一个规则的预测来解决重叠规则的问题</p>
+</li>
+</ul>
+</li>
+<li><p>决策集</p>
+<ul>
+<li><p>决策集类似于规则的民主，只是有些规则困难有更高的投票权</p>
+</li>
+<li><p>当一些规则适用时，解释性可能会受到影响</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
  
       <!-- reward -->
