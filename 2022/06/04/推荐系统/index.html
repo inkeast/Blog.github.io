@@ -42,7 +42,7 @@
           font-size: 1.6rem;
         }
       </style>
-    </head>
+    <link href="https://cdn.bootcss.com/KaTeX/0.11.1/katex.min.css" rel="stylesheet" /></head>
   </html>
 </html>
 
@@ -109,15 +109,15 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p><img src="%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F.jpg" alt="思维导图"></p>
-<h2 id="PDF"><a href="#PDF" class="headerlink" title="PDF"></a>PDF</h2>
+  <h2 id="结构">结构</h2>
+<p><img src="推荐系统.jpg" alt="思维导图" /> ## PDF 
 
 	<div class="row">
     <embed src="./推荐算法.pdf" width="100%" height="550" type="application/pdf">
 	</div>
 
 
-
+</p>
  
       <!-- reward -->
       
@@ -485,6 +485,29 @@
     viewer_init()
 </script> 
 <!-- MathJax -->
+ <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+  });
+
+  MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for(i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.6/unpacked/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+  var ayerConfig = {
+    mathjax: true,
+  };
+</script>
 
 <!-- Katex -->
 
