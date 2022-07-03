@@ -85,7 +85,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">13.8k</span>
+            <span class="post-count">17.9k</span>
         </span>
     </span>
 
@@ -94,7 +94,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">48 分钟</span>
+            <span class="post-count">63 分钟</span>
         </span>
     </span>
 </div>
@@ -1357,7 +1357,379 @@
 <li><p>返回Shapley值<span class="math inline">\(\phi_k\)</span>，即线性模型的系数</p></li>
 </ul></li>
 </ul>
-<h1 id="section"></h1>
+<h3 id="treeshap">TreeSHAP</h3>
+<ul>
+<li>TressSHAP使用基于树的机器学习模型，计算速度很快，可以计算精确的Shapley值，并且在特征相关时可以正确估计Shapley值</li>
+</ul>
+<h3 id="shap特征重要性">SHAP特征重要性</h3>
+<ul>
+<li><p>具有较大的Shapley绝对值的特征很重要</p></li>
+<li><p>获取全局重要性对每个特征的Shapley绝对值取平均值</p></li>
+<li><p>SHAP特征重要性是置换特征重要性的替代方法</p>
+<ul>
+<li><p>置换特征重要性基于模型性能的下降</p></li>
+<li><p>SHAP基于特征的归因大小</p></li>
+</ul></li>
+</ul>
+<h3 id="shap概要图">SHAP概要图</h3>
+<ul>
+<li><p>概要图将特征重要性与特征效应结合在一起</p></li>
+<li><p>概要图上的每个点都是一个特征和一个实例的Shapley值</p></li>
+</ul>
+<p><img src="SHAP概要图.png" /></p>
+<h3 id="shap依赖图">SHAP依赖图</h3>
+<ul>
+<li><p>x轴是特征值，y轴是相应的Shapley值</p></li>
+<li><p>SHAP依赖图是部分依赖图和累积局部效应图的替代方法</p></li>
+</ul>
+<p><img src="SHAP依赖图.png" /></p>
+<h3 id="shap交互值">SHAP交互值</h3>
+<ul>
+<li><p>交互效应是在考虑了单个特征效应之后的附加的组合特征效应</p></li>
+<li><p>Shapley交互指数定义：<span class="math inline">\(\phi_{i,j}=\sum_{S\subseteq\setminus\{i,j\}}\frac{|S|!(M-|S|-2)!}{2(M-1)!}\delta_{ij}(S)\)</span></p></li>
+<li><p>当<span class="math inline">\(i\neq j\)</span>且：<span class="math inline">\(\delta_{ij}(S)=f_x(S\cup\{i,j\})-f_x(S\cup\{i\}-f_x(S\cup\{j\})+f_x(S))\)</span></p></li>
+</ul>
+<h3 id="聚类shap值">聚类SHAP值</h3>
+<ul>
+<li>借助Shapley值对数据进行聚类，以找到相似实例的组</li>
+</ul>
+<h3 id="优点-13">优点</h3>
+<ul>
+<li><p>SHAP在博弈论中具有扎实的理论基础。预测结果在特征值中公平分配，可以得到对比性解释。</p></li>
+<li><p>SHAP链接LIME和Shapley值，有助于同意可解释机器学习的领域</p></li>
+<li><p>SHAP可以快速实现基于树的模型</p></li>
+<li><p>快速的计算使计算全局模型解释所需的许多Shapley值称为可能</p></li>
+</ul>
+<h3 id="缺点-13">缺点</h3>
+<ul>
+<li><p>KernelSHAP很慢</p></li>
+<li><p>KernelSHAP忽略特征相关性</p>
+<ul>
+<li>TreeSHAP通过显式建模条件期望来解决此问题</li>
+</ul></li>
+<li><p>Shapley可能会被错误的解释</p></li>
+<li><p>需要访问数据才能为新数据计算SHAP值</p></li>
+</ul>
+<h1 id="基于样本的解释">基于样本的解释</h1>
+<ul>
+<li><p>基于样本的解释方法(Example-based Explanation)选择数据集的特定特定实例来解释机器学习模型的行为或解释底层数据分布</p></li>
+<li><p>基于样本的解释大多与模型无关，因为它们使任何机器学习模型都据可解释性</p></li>
+<li><p>基于样本的方法通过选择数据集的实例而不是通过创建特征概要来解释模型</p></li>
+<li><p>只有当我们可以以人类可以理解的方式表示数据实例时，基于样本的解释才有意义</p></li>
+<li><p>基于样本的解释方法</p>
+<ul>
+<li><p>反事实解释：实例必须如何改变才能显著改变其预测</p></li>
+<li><p>对抗样本：用来欺骗机器学习模型的反事实</p></li>
+<li><p>原型：从数据中选择具有代表性的实例</p>
+<ul>
+<li>批评：原型无法解释的实例</li>
+</ul></li>
+<li><p>有影响力的实例：对预测模型的参数或预测本身影响最大的训练数据点</p></li>
+<li><p>k-最近邻：基于样本的机器学习模型</p></li>
+</ul></li>
+</ul>
+<h2 id="反事实解释">反事实解释</h2>
+<ul>
+<li><p>反事实解释(Counterfactual Explanations)通过“如果没有发生X，那么Y就不会发生”描述因果关系</p></li>
+<li><p>思考反事实需要想象一个与所观察到的事实相矛盾的假设现实</p></li>
+<li><p>预测的反事实解释描述了将预测更改为预定义输出时特征值的最小变化</p></li>
+<li><p>反事实是对人类友好的解释，因为它们与当前实例形成对比，并且通常专注于少量的特征更改</p></li>
+<li><p>反事实实例应尽可能紧密地产生预定义的预测</p></li>
+<li><p>反事实应该与特征值实例尽可能相似</p></li>
+<li><p>反事实实例应具有可能的特征值</p></li>
+</ul>
+<h3 id="生成反事实解释">生成反事实解释</h3>
+<ul>
+<li><p><span class="math inline">\(L(x,x^\prime,y^\prime,\lambda)=\lambda \cdot(\hat{f}(x^\prime)-y^\prime)+d(x,x^\prime)\)</span></p>
+<ul>
+<li><p>第一项是反事实解释<span class="math inline">\(x^\prime\)</span>的模型预测与期望结果<span class="math inline">\(y^\prime\)</span>之间的二次距离</p></li>
+<li><p>第二项是要解释的实例<span class="math inline">\(x\)</span>与反事实<span class="math inline">\(x^\prime\)</span>之间的距离<span class="math inline">\(d\)</span></p></li>
+</ul></li>
+<li><p>计算流程</p>
+<ul>
+<li><p>选择要解释的实例x，所需的结果<span class="math inline">\(y^\prime\)</span>,公差<span class="math inline">\(\epsilon\)</span>和<span class="math inline">\(\lambda\)</span>初始值</p></li>
+<li><p>采样一个随机额实例作为初始反事实</p></li>
+<li><p>以初始采样的反事实作为出发点，对损失进行优化</p></li>
+<li><p>增加<span class="math inline">\(\lambda\)</span>，直到<span class="math inline">\(|\hat{f}(x^\prime)-y^\prime|&gt;\epsilon\)</span> （以当前反事实为出发点优化损失，返回最小化损失的反事实）</p></li>
+<li><p>重复步骤2-4并返回反事实列表或最小化损失的列表</p></li>
+</ul></li>
+</ul>
+<h3 id="优点-14">优点</h3>
+<ul>
+<li><p>反事实解释的解释很清楚</p></li>
+<li><p>反事实方法不需要访问数据或模型</p></li>
+<li><p>适用于不使用机器学习的系统</p></li>
+<li><p>易于实现</p></li>
+</ul>
+<h3 id="缺点-14">缺点</h3>
+<ul>
+<li><p>对于每个实例，通常会找到多个反事实解释</p></li>
+<li><p>对于给定公差<span class="math inline">\(\epsilon\)</span>，不能保证找到反事实的实例</p></li>
+<li><p>不能很好地处理具有不同级别的分类特征</p></li>
+</ul>
+<h2 id="对抗样本">对抗样本</h2>
+<ul>
+<li>对抗样本(Adversarial Examples)是指当对一个样本的某一个特征值做出一个微小的变化而使得整个模型做出一个错误的预测</li>
+</ul>
+<h3 id="方法">方法</h3>
+<ul>
+<li><p>将对抗样本与要操控的样本之间的距离最小化，同时将预测转换为期望的结果</p></li>
+<li><p>基于梯度的优化方法来寻找深度神经网路的对抗样本的生成： <span class="math inline">\(loss(\hat{f}(x+r),l)+c\cdot|r|\)</span></p>
+<ul>
+<li><p><span class="math inline">\(x\)</span>是图像</p></li>
+<li><p><span class="math inline">\(r\)</span>对像素的变化以创建的对抗图像</p></li>
+<li><p><span class="math inline">\(l\)</span>是期望的结果类别</p></li>
+<li><p>参数<span class="math inline">\(c\)</span>用于平衡图像之间的距离和预测之间的距离</p></li>
+</ul></li>
+<li><p>用于生成对抗图像的快速梯度方法：</p>
+<ul>
+<li><p><span class="math inline">\(x^\prime=x+\epsilon\cdot sign(\bigtriangledown_xJ(\theta,x,y))\)</span></p></li>
+<li><p><span class="math inline">\(\bigtriangledown_xJ\)</span>是模型损失函数相对于原始输入像素向量<span class="math inline">\(x\)</span>的梯度</p></li>
+<li><p><span class="math inline">\(y\)</span>是<span class="math inline">\(x\)</span>的真实标签向量</p></li>
+<li><p><span class="math inline">\(\theta\)</span>是模型参数向量</p></li>
+</ul></li>
+<li><p>单像素攻击(1-pixel attacks)</p>
+<ul>
+<li><p>单像素攻击会寻找一个修改后的样本<span class="math inline">\(x^\prime\)</span>，该样本与原始图像<span class="math inline">\(x\)</span>接近，单将预测更改为对抗结果</p></li>
+<li><p><span class="math inline">\(x_i(g+1)=x_{r1}(g)+F\cdot(x_{r2}(g)+x_{r3}(g))\)</span></p></li>
+<li><p><span class="math inline">\(x_i\)</span>是候选解的元素</p></li>
+<li><p><span class="math inline">\(g\)</span>是当前代</p></li>
+<li><p><span class="math inline">\(F\)</span>是缩放参数</p></li>
+<li><p><span class="math inline">\(r1,r2,r3\)</span>是不同的随机数</p></li>
+</ul></li>
+<li><p>对抗补丁(Adversarial Patch)</p>
+<ul>
+<li><p>消除了对抗图像必须接近原始图像的限制</p></li>
+<li><p>用可以采用任何形状的补丁完全替换图像的一部分</p></li>
+<li><p>$E_{tT}[d(t(x^),t(x))]&lt;$ and <span class="math inline">\(x\in[0,1]^d\)</span></p></li>
+<li><p><span class="math inline">\(t(x)\)</span>是转换后的图像</p></li>
+<li><p><span class="math inline">\(x^\prime\)</span>是对抗样本</p></li>
+<li><p><span class="math inline">\(t(x^\prime)\)</span>是其转换后的版本</p></li>
+</ul></li>
+<li><p>黑盒攻击(Black Box Attack)</p>
+<ul>
+<li><p>无需内部模型信息且无需访问训练数据即可创建对抗样本</p></li>
+<li><p>工作原理</p>
+<ul>
+<li><p>从与训练数据来自同一域的一些图像开始</p></li>
+<li><p>从黑盒获得当前图像集的预测</p></li>
+<li><p>在当前图像集上训练代理模型</p></li>
+<li><p>使用启发式方法创建一组新的合成图像，该方法检查当前图像集，在哪个方向操作像素以使模型输出具有更大的方差</p></li>
+<li><p>基于预定义的迭代次数重复步骤2到4</p></li>
+<li><p>使用快速梯度方法为代理模型创建对抗样本</p></li>
+<li><p>用对抗样本攻击原始模型</p></li>
+</ul></li>
+<li><p>代理模型的目的是近似黑盒模型的决策边界，但不一定要达到相同的精度</p></li>
+</ul></li>
+</ul>
+<h3 id="网络安全视角">网络安全视角</h3>
+<ul>
+<li><p>网络安全三大黄金法则</p>
+<ul>
+<li><p>了解你的对手</p>
+<ul>
+<li><p>不同的应用程序有不同地对手</p></li>
+<li><p>了解你的对手意味着了解他们的目标</p></li>
+</ul></li>
+<li><p>主动</p>
+<ul>
+<li><p>主动意味着积极地测试和识别系统地弱点</p></li>
+<li><p>机器学习模型地可解释性在网络安全中起着重要作用</p></li>
+</ul></li>
+<li><p>保护自己</p>
+<ul>
+<li><p>主动地方法是使用对抗样本对分类器进行迭代重新训练</p></li>
+<li><p>使用多个分类器</p></li>
+<li><p>使用梯度掩膜(Gradient Masking)</p></li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="原型与批评prototypes-and-criticisms">原型与批评(Prototypes and Criticisms)</h2>
+<ul>
+<li><p>一个原型是一个数据实例，它是所有数据地代表</p></li>
+<li><p>批评地目的是与原型一起提供见解，尤其是对于原型不能很好代表地数据点</p></li>
+</ul>
+<h3 id="理论-5">理论</h3>
+<ul>
+<li><p>MMD-critic</p>
+<ul>
+<li><p>选择要查找地原型和批评数量</p></li>
+<li><p>通过贪婪搜索找到原型。选择原型，以使原型地分布接近数据分布。</p></li>
+<li><p>通过贪婪搜索找到批评。当原型地分布不同于数据的分布时，选择点作为批评。</p></li>
+</ul></li>
+<li><p>最大平均差异(MMD)</p>
+<ul>
+<li><p>确定原型的分布是否接近数据分布</p></li>
+<li><p><span class="math inline">\(MMD^2=\frac{1}{m^2}\sum^m_{i,j=1}k(z_i,z_j)-\frac{2}{mn}\sum^{m,n}_{i,j=1}k(z_i,x_j)+\frac{1}{n^2}\sum^n_{i,j=1}k(x_i,x_j)\)</span></p></li>
+<li><p><span class="math inline">\(k\)</span>是一个核函数，用于测量两点的相似性</p></li>
+<li><p><span class="math inline">\(m\)</span>是原型<span class="math inline">\(z\)</span>的数量</p></li>
+<li><p><span class="math inline">\(n\)</span>是原始数据集中的数据点<span class="math inline">\(x\)</span>的数量</p></li>
+</ul></li>
+<li><p>witness函数</p>
+<ul>
+<li><p>用于计算在特定点上两个密度估计值相差多少</p></li>
+<li><p><span class="math inline">\(witness(x)=\frac{1}{n}\sum^n_{i=1}k(x,x_i)-\frac{1}{m}\sum^m_{j=1}k(x,z_j)\)</span></p></li>
+</ul></li>
+<li><p>如何将MMD-critic用于可解释的机器学习</p>
+<ul>
+<li><p>帮助更好地理解数据分布</p></li>
+<li><p>通过建立可解释的模型</p></li>
+<li><p>通过使黑盒模型可解释</p>
+<ul>
+<li><p>查找MMD-critic的原型和批评</p></li>
+<li><p>照常训练机器学习模型</p></li>
+<li><p>使用机器学习模型预测原型和批评的结果</p></li>
+<li><p>分析预测：在哪些情况下算法错误？</p></li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="优点-15">优点</h3>
+<ul>
+<li><p>原型和批评更具代表性</p></li>
+<li><p>可以自由的选择原型和批评的数量</p></li>
+<li><p>适用于任意数据和任何类型的机器学习模型</p></li>
+<li><p>算法易于实现</p></li>
+<li><p>找到批评独立于原型的选择过程</p></li>
+</ul>
+<h3 id="缺点-15">缺点</h3>
+<ul>
+<li><p>如果选择的原型数量太少，无法覆盖数据分布</p></li>
+<li><p>必须选择原型和批评的数量</p></li>
+<li><p>面临如何选择核函数及其缩放参数</p></li>
+<li><p>以所有特征为输入，忽略了某些特征可能与预测目标结果无关的事实</p></li>
+<li><p>目前没有通用化的框架</p></li>
+</ul>
+<h2 id="有影响力的实例">有影响力的实例</h2>
+<ul>
+<li><p>当训练实例从训练数据中删除后，会大大改变模型的参数或预测，则称为这个实例是有影响力的。</p></li>
+<li><p>通过识别有影响力的训练实例，我们可以调试机器学习模型，并更好地解释它们的行为和预测</p></li>
+</ul>
+<h4 id="异常值">异常值</h4>
+<ul>
+<li><p>一个异常值是远离数据集中其他实例的一个实例</p></li>
+<li><p>异常值可能是有趣的数据点。当异常值影响模型时，它也是有影响力的实例</p></li>
+</ul>
+<h4 id="有影响力的实例-1">有影响力的实例</h4>
+<ul>
+<li><p>有影响力的实例是数据实例，去删除对训练模型有很大影响</p></li>
+<li><p>从训练数据中删除特定实例后对模型进行重新训练时，模型参数或预测变化越大，该实例的影响力就越大</p></li>
+</ul>
+<h3 id="删除诊断">删除诊断</h3>
+<ul>
+<li><p>DFBETA 衡量删除实例对模型参数的影响：</p>
+<ul>
+<li><p><span class="math inline">\(DFBETA_i=\beta-\beta^{(-i)}\)</span></p></li>
+<li><p><span class="math inline">\(\beta\)</span>是在所有数据实例上训练模型时的权重向量</p></li>
+<li><p><span class="math inline">\(\beta^{(-i)}\)</span>是在没有实例i的情况下训练模型时的权重向量</p></li>
+<li><p>仅适用于具有权重参数的模型</p></li>
+</ul></li>
+<li><p>Cook距离衡量删除实例对模型预测的影响</p>
+<ul>
+<li><p><span class="math inline">\(D_i=\frac{\sum^n_{i=1}(\hat{y}_j-\hat{y}_j^{(-i)})^2}{p\cdot MSE}\)</span></p></li>
+<li><p>分子是再有何没有第i个实例的情况下对模型的预测之间的平方差，是对数据集求和的结果</p></li>
+<li><p>分母是特征数p乘以均方差</p></li>
+<li><p>衡量从数据集删除第i个实例时，线性模型的预测输出会发生多少变化</p></li>
+</ul></li>
+<li><p><span class="math inline">\(Influence^{(-i)}=\frac{1}{n}\sum^n_{j=1}|\hat{y}_j-\hat{y}_j^{(-i)}|\)</span></p></li>
+</ul>
+<h3 id="影响函数">影响函数</h3>
+<ul>
+<li>影响函数(Influence Function)用以估计实例对模型参数和预测的影响力</li>
+<li>影响函数是模型参数或预测对训练实例的依赖程度的度量</li>
+<li>该方法通过很小的不服对损失中的实例加权</li>
+<li>该方法需要获取与模型参数相关的损失梯度，仅适合能够获取梯度的机器学习模型</li>
+</ul>
+<h4 id="影响函数背后的数学">影响函数背后的数学</h4>
+<ul>
+<li><p>通过无限小的步幅(<span class="math inline">\(\epsilon\)</span>)对某个训练实例的损失加权，从而产生新的模型参数</p></li>
+<li><p><span class="math inline">\(\hat{\theta}_{\epsilon,z}=argmin_{\theta\in\Theta}\frac{1}{n}\sum^n_{i=1}L(z_i,\theta)+\epsilon L(z,\theta)\)</span></p>
+<ul>
+<li><p><span class="math inline">\(\theta\)</span>是模型参数向量，<span class="math inline">\(\hat{\theta}_{\epsilon,z}\)</span>是用非常小的数字<span class="math inline">\(\epsilon\)</span>对<span class="math inline">\(z\)</span>进行加权后的参数向量</p></li>
+<li><p><span class="math inline">\(L\)</span>是模型训练的损失函数</p></li>
+<li><p><span class="math inline">\(z_i\)</span>是训练数据，<span class="math inline">\(z\)</span>是我们想要增加权重来模拟其移除的训练实例</p></li>
+</ul></li>
+<li><p><span class="math inline">\(I_{up,params}(z)=\frac{d\hat{\theta}_{\epsilon,z}}{d\epsilon}|_{\epsilon=0}=-H_{\hat{\theta}}^{-1}\triangledown_{\theta}L(z,\hat{\theta})\)</span></p>
+<ul>
+<li><p><span class="math inline">\(\triangledown_{\theta}L(z,\hat{\theta})\)</span>是对训练实例加权后参数的损失函数，表示稍微改变模型参数<span class="math inline">\(\theta\)</span>时，损失会有多大变化</p></li>
+<li><p><span class="math inline">\(-H_{\hat{\theta}}^{-1}\)</span>是逆Hessian矩阵，是梯度的变化率</p></li>
+</ul></li>
+<li><p>影响函数的应用</p>
+<ul>
+<li><p>了解模型的行为</p></li>
+<li><p>处理域不匹配/调试模型错误</p>
+<ul>
+<li>域不匹配意味着训练数据和测试数据的分布不同，可能导致模型在测试数据上的表现不佳</li>
+</ul></li>
+<li><p>修复训练数据</p></li>
+</ul></li>
+</ul>
+<h3 id="识别有影响力的实例的优点">识别有影响力的实例的优点</h3>
+<ul>
+<li><p>对有影响力的实例的研究强调了训练数据在学习过程中的作用，使影响函数和删除诊断成为机器学习模型的最佳调试工具之一</p></li>
+<li><p>删除诊断是模型无关的</p></li>
+<li><p>可以用来比较不同的机器学习模型并更好地理解它们的不同行为</p></li>
+<li><p>通过导数的影响函数也可以用来创建对抗样本</p></li>
+<li><p>可以解决 如果或增加实例z会发生什么</p></li>
+</ul>
+<h3 id="识别有影响力的实例的缺点">识别有影响力的实例的缺点</h3>
+<ul>
+<li><p>删除诊断的计算非常昂贵</p></li>
+<li><p>影响函数是删除诊断的一个很好的替代方法，但仅适用于参数可微的模型</p></li>
+<li><p>影响函数仅仅是近似的</p></li>
+<li><p>判断有影响力和没有影响力的影响力度量没有明确的截止点</p></li>
+<li><p>影响力度量仅考虑单个实例的删除</p></li>
+</ul>
+<h1 id="水晶球">水晶球</h1>
+<ul>
+<li><p>本章节预测可解释机器学习的未来</p></li>
+<li><p>预测的假设</p>
+<ul>
+<li><p>数字化：任何数据都将被数字化</p></li>
+<li><p>自动化：当一个任务可以被自动化，并且自动化的成本低于一段时间内执行该任务的成本时，该任务将会被自动化</p></li>
+<li><p>错误的指定：无名不可能完美地指定一个有所限制的目标</p></li>
+</ul></li>
+</ul>
+<h2 id="机器学习的未来">机器学习的未来</h2>
+<ul>
+<li><p>机器学习将缓慢而稳定的增长</p></li>
+<li><p>机器学习将推动很多事情</p>
+<ul>
+<li>只要可能，任务将会被表述为预测问题并通过机器学习解决</li>
+</ul></li>
+<li><p>可解释工具促进了机器学习的采用</p>
+<ul>
+<li><p>基于机器学习模型的目标永远不可能被完美指定的前提下，可解释的机器学习对于弥合错误目标和实际目标之间的差距是必要的</p></li>
+<li><p>在很多领域，可解释机器学习将成为采用机器学习的催化剂</p></li>
+</ul></li>
+</ul>
+<h2 id="可解释性的未来">可解释性的未来</h2>
+<h3 id="重点将放在模型无关的可解释性工具上">重点将放在模型无关的可解释性工具上</h3>
+<ul>
+<li><p>当与底层的机器学习模型分离时，时可解释性自动化变得容易的多</p></li>
+<li><p>本质上可解释方法也将占有一席之地</p></li>
+</ul>
+<h3 id="机器学习将是自动化的并具有可解释性">机器学习将是自动化的，并具有可解释性</h3>
+<ul>
+<li><p>机器学习的构建全自动化</p></li>
+<li><p>自动计算特征重要性，绘制部分依赖关系，训练代理模型，并最终交由人类解释</p></li>
+</ul>
+<h3 id="我们不分析数据我们分析模型">我们不分析数据，我们分析模型</h3>
+<ul>
+<li><p>不关心数据，二十关心数据中包含的知识</p></li>
+<li><p>可解释机器学习是从数据中提取知识的好方法</p></li>
+</ul>
+<h3 id="数据科学家将使自己自动化">数据科学家将使自己自动化</h3>
+<ul>
+<li>许多研究数据的工作也将自动化</li>
+</ul>
+<h3 id="机器人和程序会自我解释">机器人和程序会自我解释</h3>
+<ul>
+<li>我们需要对大量使用机器学习的机器和程序有更直观的界面</li>
+</ul>
+<h3 id="可解释性可以促进机器智能研究">可解释性可以促进机器智能研究</h3>
+<ul>
+<li>通过对机器和程序的自我解释进行更多研究，可以改善对智能的理解，并更好地创造智能机器</li>
+</ul>
  
       <!-- reward -->
       
@@ -1725,32 +2097,16 @@
     viewer_init()
 </script> 
 <!-- MathJax -->
- <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-      tex2jax: {
-          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-          processEscapes: true,
-          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-      }
-  });
-
-  MathJax.Hub.Queue(function() {
-      var all = MathJax.Hub.getAllJax(), i;
-      for(i=0; i < all.length; i += 1) {
-          all[i].SourceElement().parentNode.className += ' has-jax';
-      }
-  });
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.6/unpacked/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-<script>
-  var ayerConfig = {
-    mathjax: true,
-  };
-</script>
 
 <!-- Katex -->
-
+ 
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+        
+    
+ 
 <!-- busuanzi  -->
  
 <script src="/js/busuanzi-2.3.pure.min.js"></script>
